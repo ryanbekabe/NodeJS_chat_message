@@ -9,6 +9,17 @@ let month = date_ob.getMonth() + 1;
 let year = date_ob.getFullYear();
 const tsc = Math.floor(ts/1000);
 
+app.use(function(req, res, next) {
+  res.locals.ua = req.get('User-Agent');
+  console.log(res.locals.ua);
+	io.on('connection', (socket) => {
+		socket.on('chat message', (msg) => {
+			io.emit('chat message', res.locals.ua);
+		});
+	});
+  next();
+});
+
 app.get('/', (req, res) => {
 	//res.send('<h1>Hello world</h1>');
 //	let ts = Date.now();
@@ -32,8 +43,8 @@ io.on('connection', (socket) => {
 	console.log('a user connected');
 	socket.broadcast.emit('hi');
 	socket.on('chat message', (msg) => {
-		console.log('message: ' + msg + date_ob + '-' + date + '-' + tsc);
-		io.emit('chat message', msg + date_ob + '-' + date + '-' + month + '-' + tsc);
+		console.log('message: ' + msg + date_ob + '-' + date + '-' + tsc + '-bkb42');
+		io.emit('chat message', msg + date_ob + '-' + date + '-' + month + '-' + tsc + '-bkb43');
 	});
 	socket.on('disconnect', () => {
 		console.log('user disconnected');
